@@ -1,3 +1,14 @@
+---
+title: ClearScribe
+emoji: 🎙️
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 7860
+pinned: false
+short_description: Glossary-assisted review for noisy interview transcripts
+---
+
 # ClearScribe
 
 Glossary-assisted transcription review for noisy English interviews.

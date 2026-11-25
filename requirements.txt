@@ -4,4 +4,5 @@ scipy>=1.10
 soundfile>=0.12
 torch>=2.1
 transformers>=4.40
+gunicorn>=22.0
 pytest>=8.0
