@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>ClearScribe</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+<header>
+  <h1>ClearScribe</h1>
+  <p>Transcribe noisy interviews, with an optional glossary for the names and places you expect to hear.</p>
+</header>
+
+<main>
+  <section class="card">
+    <h2>New recording</h2>
+    <form id="upload-form">
+      <label class="field">
+        <span>Audio file <small>(English, up to about 2 minutes: {{ accept.replace(',', ', ') }})</small></span>
+        <input type="file" name="audio" accept="{{ accept }},audio/*" required>
+      </label>
+
+      <label class="field">
+        <span>Glossary <small>(optional, one name, place or term per line)</small></span>
+        <textarea name="glossary" rows="5" placeholder="Neeladri Road&#10;Aniruddha"></textarea>
+        <small class="hint"><span id="term-count">0</span> / {{ max_terms }} terms. Used for this recording only.</small>
+      </label>
+
+      <label class="field inline">
+        <span>Glossary boost</span>
+        <input type="range" name="boost" min="{{ boost_min }}" max="{{ boost_max }}" step="0.25" value="{{ boost }}">
+        <output id="boost-value">{{ boost }}</output>
+      </label>
+
+      <button type="submit" id="submit">Transcribe</button>
+      <p id="status" role="status"></p>
+    </form>
+  </section>
+
+  <section id="results" hidden>
+    <section class="card">
+      <div class="row">
+        <h2 id="file-name"></h2>
+        <span id="timing" class="muted"></span>
+      </div>
+      <audio id="player" controls preload="auto"></audio>
+      <div id="terms"></div>
+    </section>
+
+    <section class="card">
+      <h2>Review queue <span id="queue-count" class="badge"></span></h2>
+      <p class="muted">Places where the glossary changed the wording. Replay the audio, then accept or reject.
+        Nothing changes in the transcript until you accept it.</p>
+      <ol id="queue"></ol>
+    </section>
+
+    <section class="card">
+      <div class="row">
+        <h2>Transcript</h2>
+        <span>
+          <a id="export-txt" class="button secondary" href="#">Export .txt</a>
+          <a id="export-json" class="button secondary" href="#">Export .json</a>
+        </span>
+      </div>
+      <p class="muted legend">
+        <span class="w low">dotted</span> = low-confidence word &nbsp;·&nbsp;
+        <span class="seg pending">amber</span> = suggestion awaiting review &nbsp;·&nbsp;
+        <span class="seg accepted">green</span> = accepted. Click any word to replay it.
+      </p>
+      <div id="transcript" class="transcript"></div>
+
+      <details>
+        <summary>Compare standard and glossary-assisted output</summary>
+        <div class="compare">
+          <div><h3>Standard</h3><p id="standard-text"></p></div>
+          <div><h3>Glossary-assisted</h3><p id="assisted-text"></p></div>
+        </div>
+      </details>
+    </section>
+  </section>
+</main>
+
+<script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
